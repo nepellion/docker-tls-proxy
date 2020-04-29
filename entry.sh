@@ -72,8 +72,10 @@ EOF
       # This allows the ability for the execute shell window to remain open for up to 15 minutes. Without this parameter, the default is 1 minute and will automatically close.
       proxy_read_timeout 900s;
 EOF
-  sed -i "/proxy_pass/r $tmpf" /etc/nginx/conf.d/02-https.conf
-  rm -f "$tmpf"
+  if ! grep -q proxy_set_header /etc/nginx/conf.d/02-https.conf; then
+    sed -i "/proxy_pass/r $tmpf" /etc/nginx/conf.d/02-https.conf
+    rm -f "$tmpf"
+  fi
 fi
 
 echo '--/etc/nginx/nginx.conf--'
